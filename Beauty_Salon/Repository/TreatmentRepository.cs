@@ -15,7 +15,7 @@ namespace Beauty_Salon.Repository
             {
                 if (treatment != null)
                 {
-                    treatment.Image = "images/" + treatment.Image;
+                    treatment.Image = "images/treatments/" + treatment.Image;
                     db.Treatments.Add(treatment);
                     db.SaveChanges();
                     return true;
@@ -64,7 +64,7 @@ namespace Beauty_Salon.Repository
                     treatment1.Name = treatment.Name;
                     treatment1.Description = treatment.Description;
                     treatment1.Price = treatment.Price;
-                    treatment1.Image = treatment.Image;
+                    treatment1.Image = "images/treatments/" + treatment.Image;
                     db.SaveChanges();
                     return true;
                 }

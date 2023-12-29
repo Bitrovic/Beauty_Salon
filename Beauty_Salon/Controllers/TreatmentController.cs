@@ -59,8 +59,6 @@ namespace Beauty_Salon.Controllers
         {
             if(ModelState.IsValid)
             {
-                treatment.Image = "images/" + treatment.Image;
-
                 if(treatmentRepository.EditTreatment(treatment))
                 {
                     TempData["success"] = "Tretman uspešno ažuriran";
