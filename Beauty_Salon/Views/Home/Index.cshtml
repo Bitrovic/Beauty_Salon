@@ -21,18 +21,18 @@
                             </div>
                             <div class="pl-1">
                                 <p class="text-dark text-opacity-75 text-center mb-0">
-                                    List Price: 
+                                    Cena: 
                                     <span>
-                                        @treatment.Price
+                                        @treatment.Price din
                                     </span>
                                 </p>
                             </div>
                         </div>
                         <div>
-                            <a asp-action="Details"
-                            asp-route-productId="@treatment.Id"
+                            <a asp-controller="Reservation" asp-action="Create"
+                            asp-route-treatmentId="@treatment.Id"
                             class="btn btn-primary bg-gradient border-0 form-control">
-                                Details
+                                Zakažite
                             </a>
                         </div>
                     </div>

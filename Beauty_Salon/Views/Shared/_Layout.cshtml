@@ -25,11 +25,25 @@
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Početna strana</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Treatment" asp-action="Index">Tretmani</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Reservation" asp-action="Index">Rezervacije</a>
                         </li>
+
+                        @*@if (User.IsInRole(SD.Role_Admin))
+                        {*@
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Upravljanje sadržajem
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-controller="Treatment" asp-action="Index">Tretmani</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-controller="Reservation" asp-action="Index">Rezervacije</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @*}*@
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

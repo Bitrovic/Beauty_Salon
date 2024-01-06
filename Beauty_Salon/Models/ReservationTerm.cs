@@ -11,9 +11,8 @@ namespace Beauty_Salon.Models
         }
 
         public int Id { get; set; }
-        public string? Name { get; set; }
-        public TimeSpan? StartTime { get; set; }
-        public TimeSpan? EndTime { get; set; }
+        public int StartHour { get; set; }
+        public int EndHour { get; set; }
 
         public virtual ICollection<Reservation> Reservations { get; set; }
     }

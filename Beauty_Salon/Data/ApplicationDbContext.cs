@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Beauty_Salon.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext() : base() { }
 
@@ -42,7 +42,7 @@ namespace Beauty_Salon.Data
 
                 entity.Property(e => e.TreatmentId).HasColumnName("TreatmentID");
 
-                entity.Property(e => e.UserId).HasColumnName("UserID");
+                entity.Property(e => e.UserId).HasMaxLength(256);
 
                 entity.HasOne(d => d.ReservationTerm)
                     .WithMany(p => p.Reservations)
@@ -53,6 +53,12 @@ namespace Beauty_Salon.Data
                     .WithMany(p => p.Reservations)
                     .HasForeignKey(d => d.TreatmentId)
                     .HasConstraintName("FK_Reservation_Threatment");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Reservations)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Reservation_AspNetUsers");
+
             });
 
             modelBuilder.Entity<ReservationTerm>(entity =>
@@ -61,11 +67,9 @@ namespace Beauty_Salon.Data
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.EndTime).HasColumnType("time(0)");
+                entity.Property(e => e.EndHour).HasColumnType("int");
 
-                entity.Property(e => e.Name).HasMaxLength(50);
-
-                entity.Property(e => e.StartTime).HasColumnType("time(0)");
+                entity.Property(e => e.StartHour).HasColumnType("int");
             });
 
             modelBuilder.Entity<Treatment>(entity =>
