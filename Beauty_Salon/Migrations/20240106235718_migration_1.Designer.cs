@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Beauty_Salon.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240106201809_migration_1")]
+    [Migration("20240106235718_migration_1")]
     partial class migration_1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,65 @@ namespace Beauty_Salon.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("Beauty_Salon.Models.Bill", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Status")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<double?>("TotalPrice")
+                        .HasColumnType("float");
+
+                    b.Property<string>("UserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Bill", (string)null);
+                });
+
+            modelBuilder.Entity("Beauty_Salon.Models.BillItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("BillId")
+                        .HasColumnType("int")
+                        .HasColumnName("BillID");
+
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
+
+                    b.Property<int>("ReservationId")
+                        .HasColumnType("int")
+                        .HasColumnName("ReservationID");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BillId");
+
+                    b.HasIndex("ReservationId");
+
+                    b.ToTable("BillItem", (string)null);
+                });
 
             modelBuilder.Entity("Beauty_Salon.Models.Reservation", b =>
                 {
@@ -49,14 +108,16 @@ namespace Beauty_Salon.Migrations
                         .HasColumnName("TreatmentID");
 
                     b.Property<string>("UserId")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ReservationTermId");
 
                     b.HasIndex("TreatmentId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Reservation", (string)null);
                 });
@@ -321,6 +382,37 @@ namespace Beauty_Salon.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Beauty_Salon.Models.Bill", b =>
+                {
+                    b.HasOne("Beauty_Salon.Models.User", "User")
+                        .WithMany("Bills")
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_Bill_AspNetUsers");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Beauty_Salon.Models.BillItem", b =>
+                {
+                    b.HasOne("Beauty_Salon.Models.Bill", "Bill")
+                        .WithMany("BillItems")
+                        .HasForeignKey("BillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_BillItem_Bill");
+
+                    b.HasOne("Beauty_Salon.Models.Reservation", "Reservation")
+                        .WithMany("BillItems")
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_BillItem_Reservation");
+
+                    b.Navigation("Bill");
+
+                    b.Navigation("Reservation");
+                });
+
             modelBuilder.Entity("Beauty_Salon.Models.Reservation", b =>
                 {
                     b.HasOne("Beauty_Salon.Models.ReservationTerm", "ReservationTerm")
@@ -333,9 +425,16 @@ namespace Beauty_Salon.Migrations
                         .HasForeignKey("TreatmentId")
                         .HasConstraintName("FK_Reservation_Threatment");
 
+                    b.HasOne("Beauty_Salon.Models.User", "User")
+                        .WithMany("Reservations")
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_Reservation_AspNetUsers");
+
                     b.Navigation("ReservationTerm");
 
                     b.Navigation("Treatment");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -389,6 +488,16 @@ namespace Beauty_Salon.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Beauty_Salon.Models.Bill", b =>
+                {
+                    b.Navigation("BillItems");
+                });
+
+            modelBuilder.Entity("Beauty_Salon.Models.Reservation", b =>
+                {
+                    b.Navigation("BillItems");
+                });
+
             modelBuilder.Entity("Beauty_Salon.Models.ReservationTerm", b =>
                 {
                     b.Navigation("Reservations");
@@ -396,6 +505,13 @@ namespace Beauty_Salon.Migrations
 
             modelBuilder.Entity("Beauty_Salon.Models.Treatment", b =>
                 {
+                    b.Navigation("Reservations");
+                });
+
+            modelBuilder.Entity("Beauty_Salon.Models.User", b =>
+                {
+                    b.Navigation("Bills");
+
                     b.Navigation("Reservations");
                 });
 #pragma warning restore 612, 618

@@ -16,5 +16,6 @@ namespace Beauty_Salon.Models
         public override string? PhoneNumber { get; set; }
 
         public virtual ICollection<Reservation>? Reservations { get; set; }
+        public virtual ICollection<Bill>? Bills { get; set; }
     }
 }

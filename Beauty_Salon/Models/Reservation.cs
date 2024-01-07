@@ -18,5 +18,6 @@ namespace Beauty_Salon.Models
         public virtual ReservationTerm? ReservationTerm { get; set; }
         public virtual Treatment? Treatment { get; set; }
         public virtual User? User { get; set; }
+        public virtual ICollection<BillItem>? BillItems { get; set; }
     }
 }

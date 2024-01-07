@@ -33,7 +33,7 @@ namespace Beauty_Salon.Repository
 
         public List<Reservation> GetReservations()
         {
-            List<Reservation> reservations = db.Reservations.Include(x => x.ReservationTerm).Include(x => x.User).ToList();
+            List<Reservation> reservations = db.Reservations.Include(x => x.ReservationTerm).Include(x => x.User).Include(x => x.Treatment).ToList();
             return reservations;
         }
     }

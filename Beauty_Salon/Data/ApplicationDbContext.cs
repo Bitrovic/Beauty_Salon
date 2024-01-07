@@ -16,6 +16,8 @@ namespace Beauty_Salon.Data
         public virtual DbSet<Reservation> Reservations { get; set; } = null!;
         public virtual DbSet<ReservationTerm> ReservationTerms { get; set; } = null!;
         public virtual DbSet<Treatment> Treatments { get; set; } = null!;
+        public virtual DbSet<Bill> Bills { get; set; } = null!;
+        public virtual DbSet<BillItem> BillItem { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -42,7 +44,7 @@ namespace Beauty_Salon.Data
 
                 entity.Property(e => e.TreatmentId).HasColumnName("TreatmentID");
 
-                entity.Property(e => e.UserId).HasMaxLength(256);
+                entity.Property(e => e.UserId).HasMaxLength(450);
 
                 entity.HasOne(d => d.ReservationTerm)
                     .WithMany(p => p.Reservations)
@@ -83,6 +85,47 @@ namespace Beauty_Salon.Data
                 entity.Property(e => e.Image).HasMaxLength(250);
 
                 entity.Property(e => e.Name).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Bill>(entity =>
+            {
+                entity.ToTable("Bill");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.CreationDate).HasColumnType("date");
+
+                entity.Property(e => e.Status).HasMaxLength(20);
+
+                entity.Property(e => e.UserId).HasMaxLength(450);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Bills)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Bill_AspNetUsers");
+
+            });
+
+            modelBuilder.Entity<BillItem>(entity =>
+            {
+                entity.ToTable("BillItem");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.BillId).HasColumnName("BillID");
+
+                entity.Property(e => e.ReservationId).HasColumnName("ReservationID");
+
+                entity.HasOne(d => d.Bill)
+                    .WithMany(p => p.BillItems)
+                    .HasForeignKey(d => d.BillId)
+                    .HasConstraintName("FK_BillItem_Bill");
+
+                entity.HasOne(d => d.Reservation)
+                    .WithMany(p => p.BillItems)
+                    .HasForeignKey(d => d.ReservationId)
+                    .HasConstraintName("FK_BillItem_Reservation");
+
             });
 
             base.OnModelCreating(modelBuilder);

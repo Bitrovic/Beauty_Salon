@@ -18,54 +18,67 @@
                 </a>
             </div>
         </div>*@
-
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>
-                        Šifra rezervacije
-                    </th>
-                    <th>
-                        Ime i prezime korisnika
-                    </th>
-                    <th>
-                        Datum rezervacije
-                    </th>
-                    <th>
-                        Vreme rezervacije
-                    </th>
-                    <th>
-                        Status rezervacije
-                    </th>
-                    <th>Operacije</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach (var reservation in Model)
-                {
+        <form method="post" asp-controller="Bill" asp-action="Create">
+            <table class="table table-bordered table-striped">
+                <thead>
                     <tr>
-                        <td>@reservation.Id</td>
-                        <td>@reservation.User?.Name @reservation.User?.Surname</td>
-                        <td>@reservation.ReservationDate?.ToString("dd/M/yyyy")</td>
-                        <td>@(@reservation.ReservationTerm?.StartHour < 10 ? "0" + @reservation.ReservationTerm?.StartHour : @reservation.ReservationTerm?.StartHour):00 - @(@reservation.ReservationTerm?.EndHour < 10 ? "0" + @reservation.ReservationTerm?.EndHour : @reservation.ReservationTerm?.EndHour):00</td>
-                        <td>@reservation.Status</td>
-                        <td>
-                            <div class="w-75 btn-group" role="group">
-                                <a asp-controller="Treatment" asp-action="Edit" asp-route-id="@reservation.Id" class="btn btn-primary mx-2">
-                                    <i class="bi bi-pencil-square"></i> Edit
-                                </a>
-                                <a asp-controller="Treatment" asp-action="Delete" asp-route-id="@reservation.Id" class="btn btn-danger mx-2">
-                                    <i class="bi bi-trash-fill"></i> Delete
-                                </a>
-                                <a asp-controller="Treatment" asp-action="Delete" asp-route-id="@reservation.Id" class="btn btn-warning mx-2">
-                                    <i class="bi bi-check-circle"></i> Realise
-                                </a>
-                            </div>
-                        </td>
+                        <th>
+                            Šifra rezervacije
+                        </th>
+                        <th>
+                            Tretman
+                        </th>
+                        <th>
+                            Korisnik
+                        </th>
+                        <th>
+                            Datum rezervacije
+                        </th>
+                        <th>
+                            Vreme rezervacije
+                        </th>
+                        <th>
+                            Status rezervacije
+                        </th>
+                         <th>
+                            Ukupna cena rezervacije
+                        </th>
+                        <th>
+                            Plaćanje
+                        </th>
+                        <th>Operacije</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>   
+                    @foreach (var reservation in Model)
+                        {
+                            <tr>
+                                <td>@reservation.Id</td>
+                                <td>@reservation.Treatment?.Name</td>
+                                <td>@reservation.User?.Name @reservation.User?.Surname</td>
+                                <td>@reservation.ReservationDate?.ToString("dd/M/yyyy")</td>
+                                <td>@(@reservation.ReservationTerm?.StartHour < 10 ? "0" + @reservation.ReservationTerm?.StartHour : @reservation.ReservationTerm?.StartHour):00 - @(@reservation.ReservationTerm?.EndHour < 10 ? "0" + @reservation.ReservationTerm?.EndHour : @reservation.ReservationTerm?.EndHour):00</td>
+                                <td>@reservation.Status</td>
+                                <td>@reservation.Treatment?.Price din</td>
+                                <td><input type="checkbox" name="selectedReservations" value="@reservation.Id"></td>
+                                <td>
+                                    <div class="w-75 btn-group" role="group">
+                                        <a asp-controller="Treatment" asp-action="Edit" asp-route-id="@reservation.Id" class="btn btn-success mx-2">
+                                            <i class="bi bi-pencil-square"></i> Izmenite
+                                        </a>
+                                        <a asp-controller="Treatment" asp-action="Delete" asp-route-id="@reservation.Id" class="btn btn-danger mx-2">
+                                            <i class="bi bi-trash-fill"></i> Obrišite
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                </tbody>
+            </table>
+            <div class="col text-center">
+              <button type="submit" class="btn btn-primary bg-gradient w-50 py-2 text-uppercase fw-semibold"><i class="bi bi-credit-card"></i> Platite</button>
+            </div>
+        </form>
     </div>
 </div>
 

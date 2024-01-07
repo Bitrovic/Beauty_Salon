@@ -188,6 +188,27 @@ namespace Beauty_Salon.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Bill",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true),
+                    CreationDate = table.Column<DateTime>(type: "date", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    TotalPrice = table.Column<double>(type: "float", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bill", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Bill_AspNetUsers",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Reservation",
                 columns: table => new
                 {
@@ -203,6 +224,11 @@ namespace Beauty_Salon.Migrations
                 {
                     table.PrimaryKey("PK_Reservation", x => x.ID);
                     table.ForeignKey(
+                        name: "FK_Reservation_AspNetUsers",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Reservation_ReservationTerm",
                         column: x => x.ReservationTermID,
                         principalTable: "ReservationTerm",
@@ -212,11 +238,33 @@ namespace Beauty_Salon.Migrations
                         column: x => x.TreatmentID,
                         principalTable: "Treatment",
                         principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BillItem",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BillID = table.Column<int>(type: "int", nullable: false),
+                    ReservationID = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<float>(type: "real", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BillItem", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Reservation_AspNetUsers",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "ID");
+                        name: "FK_BillItem_Bill",
+                        column: x => x.BillID,
+                        principalTable: "Bill",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BillItem_Reservation",
+                        column: x => x.ReservationID,
+                        principalTable: "Reservation",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -259,6 +307,21 @@ namespace Beauty_Salon.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Bill_UserId",
+                table: "Bill",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BillItem_BillID",
+                table: "BillItem",
+                column: "BillID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BillItem_ReservationID",
+                table: "BillItem",
+                column: "ReservationID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reservation_ReservationTermID",
                 table: "Reservation",
                 column: "ReservationTermID");
@@ -267,6 +330,53 @@ namespace Beauty_Salon.Migrations
                 name: "IX_Reservation_TreatmentID",
                 table: "Reservation",
                 column: "TreatmentID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservation_UserId",
+                table: "Reservation",
+                column: "UserId");
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "Name", "NormalizedName", "ConcurrencyStamp" },
+                values: new object[,]
+                {
+                    { "1", "Admin", "Admin", "Admin" },
+                    { "2", "Customer", "Customer", "Customer" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ReservationTerm",
+                columns: new[] { "StartHour", "EndHour" },
+                values: new object[,]
+                {
+                    { 8, 9 },
+                    { 9, 10 },
+                    { 10, 11 },
+                    { 11, 12 },
+                    { 12, 13 },
+                    { 13, 14 },
+                    { 14, 15 },
+                    { 15, 16 },
+                    { 16, 17 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Treatment",
+                columns: new[] { "Name", "Description", "Price", "Image" },
+                values: new object[,]
+                {
+                    { "Masaža leđa", "Relaksirajuća masaža leđa radi opuštanja mišića", 2500.00, "images/treatments/masazaledja.jpg"},
+                    { "Manikir", "Nega noktiju i kože ruku", 1500.00, "images/treatments/manikir.jpg"},
+                    { "Masaža stopala", "Opuštajuća masaža stopala za bolju cirkulaciju", 1800.00, "images/treatments/masazastopala.jpg"},
+                    { "Tretman lica", "Čišćenje lica i nanošenje hidratantne maske", 2200.00, "images/treatments/tretmanlica.jpg"},
+                    { "Depilacija nogu", "Uklanjanje dlačica na nogama", 2000.00, "images/treatments/depilacijanogu.jpg"},
+                    { "Aromaterapija", "Tretman opuštanja uz mirisna terapeutska ulja", 1800.00, "images/treatments/aromaterapija.jpg"},
+                    { "Masaža glave i vrata", "Opuštajuća masaža glave i vrata radi smanjenja stresa", 1800.00, "images/treatments/masazaglavavrat.jpg"},
+                    { "Piling tela", "Uklanjanje mrtvih ćelija kože radi mekoće i sjaja", 2500.00, "images/treatments/pilingtela.jpg"},
+                    { "Tretman noktiju", "Oblikovanje noktiju i nanošenje boje", 1200.00, "images/treatments/tretmannoktiju.jpg"},
+                    { "Tajlandska masaža", "Tradicionalna tajlandska masaža za potpuno opuštanje", 3000.00, "images/treatments/tajlandskamasaza.jpg"}
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -287,10 +397,16 @@ namespace Beauty_Salon.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Reservation");
+                name: "BillItem");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Bill");
+
+            migrationBuilder.DropTable(
+                name: "Reservation");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
