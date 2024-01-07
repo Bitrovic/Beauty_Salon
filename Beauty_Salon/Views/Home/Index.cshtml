@@ -1,4 +1,8 @@
-﻿@model IEnumerable<Treatment>
+﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+
+@model IEnumerable<Treatment>
 
 <div class="row pb-3">
     @foreach (var treatment in Model)
@@ -28,13 +32,21 @@
                                 </p>
                             </div>
                         </div>
-                        <div>
-                            <a asp-controller="Reservation" asp-action="Create"
+                        @{
+                            var isLoggedIn = HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
+                            var isAdmin = HttpContextAccessor.HttpContext.User.IsInRole("Admin");
+                        }
+
+                        @if (isLoggedIn)
+                        {
+                            <div>
+                                <a asp-controller="Reservation" asp-action="Create"
                             asp-route-treatmentId="@treatment.Id"
                             class="btn btn-primary bg-gradient border-0 form-control">
-                                Zakažite
-                            </a>
-                        </div>
+                                    Zakažite
+                                </a>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

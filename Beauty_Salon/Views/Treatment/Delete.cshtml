@@ -15,22 +15,18 @@
                 <div class="form-floating py-2 col-12">
                     <input asp-for="Name" class="form-control border-0 shadow" disabled />
                     <label asp-for="Name" class="ms-2"></label>
-                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="form-floating py-2 col-12">
                     <input asp-for="Description" class="form-control border-0 shadow" disabled />
                     <label asp-for="Description" class="ms-2"></label>
-                    <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
                 <div class="form-floating py-2 col-12">
                     <input asp-for="Price" class="form-control border-0 shadow" disabled />
                     <label asp-for="Price" class="ms-2"></label>
-                    <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
                  <div class="form-floating py-2 col-12">
                     <input type="file" asp-for="Image" class="form-control border-0 shadow" disabled />
                     <label asp-for="Image" class="ms-2"></label>
-                    <span asp-validation-for="Image" class="text-danger"></span>
                 </div>
 
                 <div class="row pt-2">
@@ -48,11 +44,3 @@
     </div>
 </div>
 
-
-
-
-@section Scripts{
-    @{
-    <partial name="_ValidationScriptsPartial"/>
-    }
-}

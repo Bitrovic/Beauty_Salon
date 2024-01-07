@@ -1,0 +1,89 @@
+﻿@model List<Reservation>
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Lista svih rezervacija</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <form method="post" asp-controller="Bill" asp-action="Create">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            Šifra rezervacije
+                        </th>
+                        <th>
+                            Tretman
+                        </th>
+                        <th>
+                            Korisnik
+                        </th>
+                        <th>
+                            Datum rezervacije
+                        </th>
+                        <th>
+                            Vreme rezervacije
+                        </th>
+                        <th>
+                            Status rezervacije
+                        </th>
+                         <th>
+                            Ukupna cena rezervacije
+                        </th>
+                        <th>Operacije</th>
+                    </tr>
+                </thead>
+                <tbody>   
+                    @foreach (var reservation in Model)
+                    {
+                        <tr>
+                            <td>@reservation.Id</td>
+                            <td>@reservation.Treatment?.Name</td>
+                            <td>@reservation.User?.Name @reservation.User?.Surname</td>
+                            <td>@reservation.ReservationDate?.ToString("dd/M/yyyy")</td>
+                            <td>@(@reservation.ReservationTerm?.StartHour < 10 ? "0" + @reservation.ReservationTerm?.StartHour : @reservation.ReservationTerm?.StartHour):00 - @(@reservation.ReservationTerm?.EndHour < 10 ? "0" + @reservation.ReservationTerm?.EndHour : @reservation.ReservationTerm?.EndHour):00</td>
+                            @if(reservation.Status == "Plaćeno")
+                            {
+                                <td><span class="badge bg-info text-black fw-bold">@reservation.Status</span></td>
+                            }
+                            else if(reservation.Status == "Otkazano")
+                            {
+                                <td><span class="badge bg-danger text-black fw-bold">@reservation.Status</span></td>
+                            }
+                            else if(reservation.Status == "Realizovano")
+                            {
+                                <td><span class="badge bg-success text-black fw-bold">@reservation.Status</span></td>
+                            }
+                            else
+                            {
+                                <td><span class="badge bg-warning text-black fw-bold">@reservation.Status</span></td>
+                            }
+                            <td>@reservation.Treatment?.Price din</td>
+                            <td>
+                                <div class="w-75 btn-group" role="group">
+                                    @if (reservation.Status == "Plaćeno")
+                                    {
+                                        <a asp-controller="Reservation" asp-action="Realise" asp-route-id="@reservation.Id" class="btn btn-warning mx-2">
+                                            <i class="bi bi-pencil-square"></i> Realizujte
+                                        </a>
+                                    }
+                                    @if (reservation.Status == "Nerealizovano")
+                                    {
+                                        <a asp-controller="Reservation" asp-action="AdminDelete" asp-route-id="@reservation.Id" class="btn btn-danger mx-2">
+                                            <i class="bi bi-trash-fill"></i> Obrišite
+                                        </a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+

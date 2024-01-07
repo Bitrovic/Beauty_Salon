@@ -1,0 +1,104 @@
+﻿@model IEnumerable<BillItem>
+
+<div class="card" style="background-color:#F0FFF0;">
+  <div class="card-body">
+    <div class="container mb-5 mt-3">
+        @if (Model != null)
+            {
+                <div class="row d-flex align-items-baseline">
+                    <div class="col-xl-9">
+                        <p class="text-primary" style="font-size: 20px;">Račun >> <strong>Šifra: #@ViewBag.Bill.Id</strong></p>
+                    </div>
+                    <div class="col-xl-3 float-end">
+                        <a id="printButton" class="btn btn-success text-capitalize border-0" data-mdb-ripple-color="dark"><i class="bi bi-printer-fill"></i> Štampajte</a>
+                    </div>
+                    <hr>
+                </div>
+
+                <div class="container">
+                    <div class="col-md-12">
+                        <div class="text-center">
+                            <i class="fab fa-mdb fa-4x ms-0" style="color:#5d9fc5 ;"></i>
+                            <p class="pt-0">BeautySalon.com</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xl-8">
+                            <ul class="list-unstyled">
+                                <li class="text-muted">Za: <span class="text-success">@ViewBag.Bill.User.Name @ViewBag.Bill.User.Surname</span></li>
+                                <li class="text-muted">Adresa: @ViewBag.Bill.User.Address</li>
+                                <li class="text-muted">Email: @ViewBag.Bill.User.Email</li>
+                                <li class="text-muted"><i class="bi bi-telephone-fill text-success"></i> @ViewBag.Bill.User.PhoneNumber</li>
+                            </ul>
+                        </div>
+                        <div class="col-xl-4">
+                            <p class="text-muted">Račun</p>
+                            <ul class="list-unstyled">
+                                <li class="text-muted"><i class="bi bi-circle-fill text-success"></i> <span
+                                    class="fw-bold">Šifra: </span>#@ViewBag.Bill.Id</li>
+                                                <li class="text-muted"><i class="bi bi-circle-fill text-success"></i> <span
+                                    class="fw-bold">Datum kreiranja: </span>@ViewBag.Bill.CreationDate.ToString("dd/M/yyyy")</li>
+                                                <li class="text-muted"><i class="bi bi-circle-fill text-success"></i> <span
+                                    class="me-1 fw-bold">Status: </span>
+                                    @if(ViewBag.Bill.Status == "Izdato")
+                                    {
+                                        <span class="badge bg-success text-black fw-bold">@ViewBag.Bill.Status</span>
+                                    }
+                                    else if(ViewBag.Bill.Status == "Stornirano")
+                                    {
+                                        <span class="badge bg-danger text-black fw-bold">@ViewBag.Bill.Status</span>
+                                    }                                    else
+                                    {
+                                        <span class="badge bg-warning text-black fw-bold">@ViewBag.Bill.Status</span>
+                                    }                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row my-2 mx-1 justify-content-center">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Šifra stavke računa</th>
+                                    <th>Šifra rezervacije</th>
+                                    <th>Tretman</th>
+                                    <th>Cena</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var billItem in Model)
+                                {
+                                    <tr>
+                                        <th>@billItem.Id</th>
+                                        <th>@billItem.ReservationId</th>
+                                        <td>@billItem.Reservation.Treatment.Name</td>
+                                        <td>@billItem.Reservation.Treatment.Price din</td>
+                                    </tr>
+                                }
+                            </tbody>
+                </table>
+            </div>
+
+            <div class="row">
+              <div class="col-xl-8">
+                <p class="ms-3">Hvala Vam na kupovini</p>
+
+              </div>
+              <div class="col-xl-3">
+                <p class="text-black float-start"><span class="text-black me-3"> Ukupna cena:</span><span
+                    style="font-size: 25px;" class="text-success">@ViewBag.Bill.TotalPrice din</span></p>
+              </div>
+            </div> 
+        <hr>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+
+<script>
+    document.getElementById("printButton").addEventListener("click", function () {
+        window.print();
+    });
+</script>

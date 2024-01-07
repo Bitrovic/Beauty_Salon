@@ -67,15 +67,16 @@ namespace Beauty_Salon.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "Morate uneti Email.")]
+            [EmailAddress(ErrorMessage = "Email nije validan.")]
             public string Email { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Morate uneti šifru.")]
+            [Display(Name = "Šifra")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
@@ -122,7 +123,7 @@ namespace Beauty_Salon.Areas.Identity.Pages.Account
                     if (user != null)
                     {
                         HttpContext.Session.SetString("LoggedUser", JsonConvert.SerializeObject(user));
-                        _logger.LogInformation("User logged in.");
+                        _logger.LogInformation("Korisnik ulogovan.");
                         return LocalRedirect(returnUrl);
                     }
                 }
@@ -137,7 +138,7 @@ namespace Beauty_Salon.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Neuspešno logovanje.");
                     return Page();
                 }
             }

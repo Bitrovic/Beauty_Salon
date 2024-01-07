@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -9,6 +13,7 @@
     <link rel="stylesheet" href="~/Beauty_Salon.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 <body>
     <header>
@@ -24,29 +29,40 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Početna strana</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Reservation" asp-action="Index">Rezervacije</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Bill" asp-action="Index">Istorija plaćanja</a>
-                        </li>
+                        @{
+                            var isLoggedIn = HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
+                            var isAdmin = HttpContextAccessor.HttpContext.User.IsInRole("Admin");
+                        }
 
-                        @*@if (User.IsInRole(SD.Role_Admin))
-                        {*@
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Upravljanje sadržajem
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li class="nav-item">
-                                        <a class="dropdown-item" asp-controller="Treatment" asp-action="Index">Tretmani</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dropdown-item" asp-controller="Reservation" asp-action="Index">Sve rezervacije</a>
-                                    </li>
-                                </ul>
+                        @if (isLoggedIn)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Reservation" asp-action="Index">Rezervacije</a>
                             </li>
-                        @*}*@
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Bill" asp-action="Index">Istorija plaćanja</a>
+                            </li>
+
+                            if (isAdmin)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Upravljanje sadržajem
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="nav-item">
+                                            <a class="dropdown-item" asp-controller="Treatment" asp-action="Index">Tretmani - Admin panel</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="dropdown-item" asp-controller="Reservation" asp-action="AllReservations">Sve rezervacije</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="dropdown-item" asp-controller="Bill" asp-action="AllBills">Istorija svih plaćanja</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

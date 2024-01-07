@@ -75,28 +75,29 @@ namespace Beauty_Salon.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            [Required(ErrorMessage = "You must enter a name.")]
-            [StringLength(100, ErrorMessage = "You must enter atleast 2 characters.", MinimumLength = 2)]
+            [Required(ErrorMessage = "Morate uneti ime.")]
+            [StringLength(100, ErrorMessage = "Morate uneti bar 2 karaktera.", MinimumLength = 2)]
             public string Name { get; set; }
 
-            [Required(ErrorMessage = "You must enter a surname.")]
-            [StringLength(100, ErrorMessage = "You must enter atleast 3 characters.", MinimumLength = 3)]
+            [Required(ErrorMessage = "Morate uneti prezime.")]
+            [StringLength(100, ErrorMessage = "Morate uneti bar 3 karaktera.", MinimumLength = 3)]
             public string Surname { get; set; }
 
-            [Required(ErrorMessage = "You must enter a address.")]
-            [StringLength(100, ErrorMessage = "You must enter atleast 6 characters.", MinimumLength = 6)]
+            [Required(ErrorMessage = "Morate uneti adresu.")]
+            [StringLength(100, ErrorMessage = "Morate uneti bar 6 karaktera.", MinimumLength = 6)]
             public string Address { get; set; }
 
-            [Required(ErrorMessage = "You must enter a phone number")]
+            [Required(ErrorMessage = "Morate uneti broj telefona.")]
             [Phone]
+            [Display(Name = "Broj telefona")]
             public string PhoneNumber { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "Morate uneti Email.")]
+            [EmailAddress(ErrorMessage = "Email nije validan.")]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
@@ -104,10 +105,10 @@ namespace Beauty_Salon.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = "Morate uneti šifru.")]
+            [StringLength(100, ErrorMessage = "{0} mora da ima najmanje {2} i najviše {1} karaktera.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Šifra")]
             public string Password { get; set; }
 
             /// <summary>
@@ -115,8 +116,8 @@ namespace Beauty_Salon.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Potvrdite šifru")]
+            [Compare("Password", ErrorMessage = "Šifra i potvrda šifre se ne poklapaju.")]
             public string ConfirmPassword { get; set; }
         }
 

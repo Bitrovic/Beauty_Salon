@@ -1,5 +1,6 @@
 ﻿using Beauty_Salon.Models;
 using Beauty_Salon.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Beauty_Salon.Controllers
@@ -12,11 +13,13 @@ namespace Beauty_Salon.Controllers
             return View(treatmentRepository.GetTreatments());
         }
 
+        [Authorize(Roles = "Admin, Customer")]
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin, Customer")]
         [HttpPost]
         public IActionResult Create(Treatment treatment)
         {
@@ -36,6 +39,7 @@ namespace Beauty_Salon.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin, Customer")]
         public IActionResult Edit(int id)
         {
             if (id == 0)
@@ -54,6 +58,7 @@ namespace Beauty_Salon.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Customer")]
         [HttpPost]
         public IActionResult Edit(Treatment treatment)
         {
@@ -73,6 +78,7 @@ namespace Beauty_Salon.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin, Customer")]
         public IActionResult Delete(int id)
         {
             if (id == 0)
@@ -91,11 +97,12 @@ namespace Beauty_Salon.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Customer")]
         [HttpPost]
         public IActionResult Delete(Treatment treatment)
         {
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid)
+            //{
                 if (treatmentRepository.DeleteTreatment(treatment.Id))
                 {
                     TempData["success"] = "Tretman uspešno obrisan";
@@ -104,10 +111,10 @@ namespace Beauty_Salon.Controllers
                 else
                 {
                     TempData["error"] = "Tretman neuspešno obrisan";
-                    return View();
+                    return RedirectToAction("Index");
                 }
-            }
-            return View();
+            //}
+            //return View();
         }
     }
 }

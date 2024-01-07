@@ -50,6 +50,7 @@
                                     </span>
                                    <input asp-for="ReservationDate" value="1" class="form-control text-end"
                                            aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="reservationDateInput"/> 
+                                    <span asp-validation-for="ReservationDate" class="text-danger"></span>
                                 </div>
                                 <div class="input-group mb-3">
                                     <span class="input-group-text bg-primary text-white border-0 fw-semibold"
@@ -63,6 +64,7 @@
                                             <option value="@term.Id">@(term.StartHour < 10 ? "0" + term.StartHour : term.StartHour):00</option>
                                         }
                                    </select>
+                                   <span asp-validation-for="ReservationTermId" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -80,6 +82,13 @@
         </div>
     </div>
 </form>
+
+
+@section Scripts{
+    @{
+    <partial name="_ValidationScriptsPartial"/>
+    }
+}
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

@@ -78,7 +78,7 @@ namespace Beauty_Salon.Repository
             }
         }
 
-        public Treatment GetTreatmentById(int id)
+        public Treatment GetTreatmentById(int? id)
         {
             Treatment? treatment = db.Treatments.FirstOrDefault(x =>x.Id == id);
             return treatment!;
