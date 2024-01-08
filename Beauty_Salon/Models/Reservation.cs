@@ -16,6 +16,7 @@ namespace Beauty_Salon.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? ReservationDate { get; set; }
+        public DateTime? CreationDate { get; set; }
         public string? Status { get; set; }
 
         public virtual ReservationTerm? ReservationTerm { get; set; }

@@ -29,6 +29,7 @@ namespace Beauty_Salon.Areas.Identity.Pages.Account
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
             HttpContext.Session.Clear();
+            TempData["success"] = "Uspešno ste se izlogovali";
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);

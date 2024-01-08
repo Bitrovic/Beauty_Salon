@@ -18,6 +18,7 @@ namespace Beauty_Salon.Repository
                 if (reservation != null)
                 {
                     reservation.Status = "Nerealizovano";
+                    reservation.CreationDate = DateTime.Today;
                     db.Reservations.Add(reservation);
                     db.SaveChanges();
                     return true;
@@ -68,6 +69,7 @@ namespace Beauty_Salon.Repository
                     reservation1.ReservationTermId = reservation.ReservationTermId;
                     reservation1.ReservationDate = reservation.ReservationDate;
                     reservation1.Status = reservation.Status;
+                    reservation1.CreationDate = DateTime.Today;
                     db.SaveChanges();
                     return true;
                 }

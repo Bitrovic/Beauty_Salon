@@ -37,6 +37,7 @@ namespace Beauty_Salon.Data
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.ReservationDate).HasColumnType("date");
+                entity.Property(e => e.CreationDate).HasColumnType("date");
 
                 entity.Property(e => e.ReservationTermId).HasColumnName("ReservationTermID");
 
@@ -85,6 +86,8 @@ namespace Beauty_Salon.Data
                 entity.Property(e => e.Image).HasMaxLength(250);
 
                 entity.Property(e => e.Name).HasMaxLength(50);
+                
+                entity.Property(e => e.Status).HasMaxLength(20);
             });
 
             modelBuilder.Entity<Bill>(entity =>

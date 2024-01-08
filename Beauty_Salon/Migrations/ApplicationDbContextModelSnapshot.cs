@@ -65,7 +65,7 @@ namespace Beauty_Salon.Migrations
                         .HasColumnType("int")
                         .HasColumnName("BillID");
 
-                    b.Property<float>("Price")
+                    b.Property<float?>("Price")
                         .HasColumnType("real");
 
                     b.Property<int>("ReservationId")
@@ -90,10 +90,15 @@ namespace Beauty_Salon.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("date");
+
                     b.Property<DateTime?>("ReservationDate")
+                        .IsRequired()
                         .HasColumnType("date");
 
                     b.Property<int?>("ReservationTermId")
+                        .IsRequired()
                         .HasColumnType("int")
                         .HasColumnName("ReservationTermID");
 
@@ -102,6 +107,7 @@ namespace Beauty_Salon.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<int?>("TreatmentId")
+                        .IsRequired()
                         .HasColumnType("int")
                         .HasColumnName("TreatmentID");
 
@@ -150,19 +156,27 @@ namespace Beauty_Salon.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Image")
+                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<double?>("Price")
+                        .IsRequired()
                         .HasColumnType("float");
+
+                    b.Property<string>("Status")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -178,13 +192,16 @@ namespace Beauty_Salon.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -198,7 +215,9 @@ namespace Beauty_Salon.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -212,6 +231,7 @@ namespace Beauty_Salon.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
@@ -221,7 +241,9 @@ namespace Beauty_Salon.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -416,11 +438,15 @@ namespace Beauty_Salon.Migrations
                     b.HasOne("Beauty_Salon.Models.ReservationTerm", "ReservationTerm")
                         .WithMany("Reservations")
                         .HasForeignKey("ReservationTermId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("FK_Reservation_ReservationTerm");
 
                     b.HasOne("Beauty_Salon.Models.Treatment", "Treatment")
                         .WithMany("Reservations")
                         .HasForeignKey("TreatmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("FK_Reservation_Threatment");
 
                     b.HasOne("Beauty_Salon.Models.User", "User")

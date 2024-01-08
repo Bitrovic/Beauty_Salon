@@ -28,11 +28,11 @@ namespace Beauty_Salon.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -71,10 +71,11 @@ namespace Beauty_Salon.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
-                    Price = table.Column<double>(type: "float", nullable: true),
-                    Image = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -215,9 +216,10 @@ namespace Beauty_Salon.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true),
-                    TreatmentID = table.Column<int>(type: "int", nullable: true),
-                    ReservationTermID = table.Column<int>(type: "int", nullable: true),
-                    ReservationDate = table.Column<DateTime>(type: "date", nullable: true),
+                    TreatmentID = table.Column<int>(type: "int", nullable: false),
+                    ReservationTermID = table.Column<int>(type: "int", nullable: false),
+                    ReservationDate = table.Column<DateTime>(type: "date", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "date", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true)
                 },
                 constraints: table =>
@@ -232,12 +234,14 @@ namespace Beauty_Salon.Migrations
                         name: "FK_Reservation_ReservationTerm",
                         column: x => x.ReservationTermID,
                         principalTable: "ReservationTerm",
-                        principalColumn: "ID");
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Reservation_Threatment",
                         column: x => x.TreatmentID,
                         principalTable: "Treatment",
-                        principalColumn: "ID");
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -248,7 +252,7 @@ namespace Beauty_Salon.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BillID = table.Column<int>(type: "int", nullable: false),
                     ReservationID = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<float>(type: "real", nullable: false)
+                    Price = table.Column<float>(type: "real", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -337,13 +341,13 @@ namespace Beauty_Salon.Migrations
                 column: "UserId");
 
             migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "Name", "NormalizedName", "ConcurrencyStamp" },
-                values: new object[,]
-                {
+               table: "AspNetRoles",
+               columns: new[] { "Id", "Name", "NormalizedName", "ConcurrencyStamp" },
+               values: new object[,]
+               {
                     { "1", "Admin", "Admin", "Admin" },
                     { "2", "Customer", "Customer", "Customer" }
-                });
+               });
 
             migrationBuilder.InsertData(
                 table: "ReservationTerm",
@@ -363,19 +367,19 @@ namespace Beauty_Salon.Migrations
 
             migrationBuilder.InsertData(
                 table: "Treatment",
-                columns: new[] { "Name", "Description", "Price", "Image" },
+                columns: new[] { "Name", "Description", "Price", "Image", "Status" },
                 values: new object[,]
                 {
-                    { "Masaža leđa", "Relaksirajuća masaža leđa radi opuštanja mišića", 2500.00, "images/treatments/masazaledja.jpg"},
-                    { "Manikir", "Nega noktiju i kože ruku", 1500.00, "images/treatments/manikir.jpg"},
-                    { "Masaža stopala", "Opuštajuća masaža stopala za bolju cirkulaciju", 1800.00, "images/treatments/masazastopala.jpg"},
-                    { "Tretman lica", "Čišćenje lica i nanošenje hidratantne maske", 2200.00, "images/treatments/tretmanlica.jpg"},
-                    { "Depilacija nogu", "Uklanjanje dlačica na nogama", 2000.00, "images/treatments/depilacijanogu.jpg"},
-                    { "Aromaterapija", "Tretman opuštanja uz mirisna terapeutska ulja", 1800.00, "images/treatments/aromaterapija.jpg"},
-                    { "Masaža glave i vrata", "Opuštajuća masaža glave i vrata radi smanjenja stresa", 1800.00, "images/treatments/masazaglavavrat.jpg"},
-                    { "Piling tela", "Uklanjanje mrtvih ćelija kože radi mekoće i sjaja", 2500.00, "images/treatments/pilingtela.jpg"},
-                    { "Tretman noktiju", "Oblikovanje noktiju i nanošenje boje", 1200.00, "images/treatments/tretmannoktiju.jpg"},
-                    { "Tajlandska masaža", "Tradicionalna tajlandska masaža za potpuno opuštanje", 3000.00, "images/treatments/tajlandskamasaza.jpg"}
+                    { "Masaža leđa", "Relaksirajuća masaža leđa radi opuštanja mišića", 2500.00, "images/treatments/masazaledja.jpg", "Aktivno"},
+                    { "Manikir", "Nega noktiju i kože ruku", 1500.00, "images/treatments/manikir.jpg", "Aktivno"},
+                    { "Masaža stopala", "Opuštajuća masaža stopala za bolju cirkulaciju", 1800.00, "images/treatments/masazastopala.jpg", "Aktivno"},
+                    { "Tretman lica", "Čišćenje lica i nanošenje hidratantne maske", 2200.00, "images/treatments/tretmanlica.jpg", "Aktivno"},
+                    { "Depilacija nogu", "Uklanjanje dlačica na nogama", 2000.00, "images/treatments/depilacijanogu.jpg", "Aktivno"},
+                    { "Aromaterapija", "Tretman opuštanja uz mirisna terapeutska ulja", 1800.00, "images/treatments/aromaterapija.jpg", "Aktivno"},
+                    { "Masaža glave i vrata", "Opuštajuća masaža glave i vrata radi smanjenja stresa", 1800.00, "images/treatments/masazaglavavrat.jpg", "Aktivno"},
+                    { "Piling tela", "Uklanjanje mrtvih ćelija kože radi mekoće i sjaja", 2500.00, "images/treatments/pilingtela.jpg", "Aktivno"},
+                    { "Tretman noktiju", "Oblikovanje noktiju i nanošenje boje", 1200.00, "images/treatments/tretmannoktiju.jpg", "Aktivno"},
+                    { "Tajlandska masaža", "Tradicionalna tajlandska masaža za potpuno opuštanje", 3000.00, "images/treatments/tajlandskamasaza.jpg", "Aktivno"}
                 });
         }
 

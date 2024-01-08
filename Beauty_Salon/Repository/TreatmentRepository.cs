@@ -38,7 +38,7 @@ namespace Beauty_Salon.Repository
             {
                 if (treatment != null)
                 {
-                    db.Treatments.Remove(treatment);
+                    treatment.Status = "Neaktivno";
                     db.SaveChanges();
                     return true;
                 }
@@ -65,6 +65,7 @@ namespace Beauty_Salon.Repository
                     treatment1.Description = treatment.Description;
                     treatment1.Price = treatment.Price;
                     treatment1.Image = "images/treatments/" + treatment.Image;
+                    treatment1.Status = treatment.Status;
                     db.SaveChanges();
                     return true;
                 }
@@ -86,7 +87,7 @@ namespace Beauty_Salon.Repository
 
         public List<Treatment> GetTreatments()
         {
-            List<Treatment> treatments = db.Treatments.ToList();
+            List<Treatment> treatments = db.Treatments.Where(t => t.Status != "Neaktivno").ToList();
             return treatments;
         }
     }

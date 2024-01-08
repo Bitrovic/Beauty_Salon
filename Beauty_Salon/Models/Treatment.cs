@@ -24,6 +24,7 @@ namespace Beauty_Salon.Models
         [Required(ErrorMessage = "Morate uneti sliku tretmana")]
         [StringLength(250, MinimumLength = 5, ErrorMessage = "Slika tretmana mora imati bar 5 karaktera")]
         public string? Image { get; set; }
+        public string? Status { get; set; }
 
         public virtual ICollection<Reservation> Reservations { get; set; }
     }
