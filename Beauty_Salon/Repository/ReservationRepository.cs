@@ -112,6 +112,17 @@ namespace Beauty_Salon.Repository
             return reservations;
         }
 
+        public List<Reservation> GetUserReservations(string userId)
+        {
+            List<Reservation> reservations = db.Reservations.
+                Include(x => x.ReservationTerm).
+                Include(x => x.User).
+                Include(x => x.Treatment).
+                Where(x => x.UserId == userId).
+                ToList();
+            return reservations;
+        }
+
         public bool RealiseReservation(int reservationId)
         {
             Reservation? reservation = db.Reservations.FirstOrDefault(x => x.Id == reservationId);

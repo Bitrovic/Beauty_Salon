@@ -17,7 +17,10 @@ namespace Beauty_Salon.Controllers
         [Authorize(Roles = "Admin, Customer")]
         public IActionResult Index()
         {
-            List<Reservation> reservations = reservationRepository.GetReservations();
+            var loggedUserJson = HttpContext.Session.GetString("LoggedUser");
+            var user = JsonConvert.DeserializeObject<User>(loggedUserJson);
+
+            List<Reservation> reservations = reservationRepository.GetUserReservations(user.Id);
             bool payment = false;
             if(reservations != null)
             {

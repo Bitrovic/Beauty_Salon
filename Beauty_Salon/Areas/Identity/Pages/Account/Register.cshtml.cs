@@ -77,14 +77,17 @@ namespace Beauty_Salon.Areas.Identity.Pages.Account
         {
             [Required(ErrorMessage = "Morate uneti ime.")]
             [StringLength(100, ErrorMessage = "Morate uneti bar 2 karaktera.", MinimumLength = 2)]
+            [Display(Name = "Ime")]
             public string Name { get; set; }
 
             [Required(ErrorMessage = "Morate uneti prezime.")]
             [StringLength(100, ErrorMessage = "Morate uneti bar 3 karaktera.", MinimumLength = 3)]
+            [Display(Name = "Prezime")]
             public string Surname { get; set; }
 
             [Required(ErrorMessage = "Morate uneti adresu.")]
             [StringLength(100, ErrorMessage = "Morate uneti bar 6 karaktera.", MinimumLength = 6)]
+            [Display(Name = "Adresa")]
             public string Address { get; set; }
 
             [Required(ErrorMessage = "Morate uneti broj telefona.")]
